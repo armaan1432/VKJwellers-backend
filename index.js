@@ -38,7 +38,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",              // local client
   "http://localhost:5174",              // local admin
-  "https://vkjwellersclient-git-main-armaan-shuklas-projects.vercel.app", // deployed client
+  "https://vkjwellersclient-git-main-armaan-shuklas-projects.vercel.app",
+  "https://vkjwellersclient.vercel.app/",// deployed client
   "https://vkjwellersadmin.vercel.app"   // deployed admin
 ];
 
