@@ -17,6 +17,9 @@ import orderRoutes from "./routes/orderRoutes.js";
 // Load environment variables
 dotenv.config();
 
+// ========================
+// ✅ DEBUG ENV
+// ========================
 console.log("===================================");
 console.log("🌩️  Cloudinary ENV Check");
 console.log("Cloud Name :", process.env.CLOUDINARY_CLOUD_NAME || "❌ Missing");
@@ -30,11 +33,13 @@ const app = express();
 // ========================
 // ✅ CORS CONFIGURATION
 // ========================
+
+// Allowed origins: local + deployed frontend URLs
 const allowedOrigins = [
-  "https://client-frontend.vercel.app", // replace with your deployed client URL
-  "https://admin-frontend.vercel.app",  // replace with your deployed admin URL
-  "http://localhost:5173",              // local dev client
-  "http://localhost:5174"               // local dev admin
+  "http://localhost:5173",              // local client
+  "http://localhost:5174",              // local admin
+  "https://vkjwellersclient.vercel.app", // deployed client
+  "https://vkjwellersadmin.vercel.app"   // deployed admin
 ];
 
 app.use(
@@ -43,17 +48,17 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error(`CORS blocked for origin: ${origin}`));
       }
     },
-    credentials: true, // required for cookies
+    credentials: true, // ✅ critical for cookies
     methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'],
     allowedHeaders: ['Content-Type','Authorization']
   })
 );
 
 // ========================
-// ✅ Middleware
+// ✅ MIDDLEWARE
 // ========================
 app.use(cookieParser());
 app.use(express.json());
@@ -73,7 +78,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 
-// Test root route
+// Root test route
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
@@ -83,6 +88,7 @@ app.get("/", (req, res) => {
 // ========================
 connectDb()
   .then(() => {
+    console.log(`✅ MongoDB Connected Successfully`);
     app.listen(port, () => {
       console.log(`🚀 Server running on port ${port}`);
     });
@@ -93,7 +99,7 @@ connectDb()
   });
 
 // ========================
-// ✅ DEBUG INFO
+// ✅ RAZORPAY DEBUG
 // ========================
 console.log("Razorpay Key:", process.env.RAZORPAY_KEY_ID);
 console.log("Razorpay Secret:", process.env.RAZORPAY_KEY_SECRET ? "✅ Loaded" : "❌ Missing");
