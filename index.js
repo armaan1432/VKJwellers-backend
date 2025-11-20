@@ -36,25 +36,27 @@ const app = express();
 
 // Allowed origins: local + deployed frontend URLs
 const allowedOrigins = [
-  "http://localhost:5173",              // local client
-  "http://localhost:5174",              // local admin
+  "http://localhost:5173", // local client
+  "http://localhost:5174", // local admin
   "https://vkjwellersclient-git-main-armaan-shuklas-projects.vercel.app",
-  "https://vkjwellersclient.vercel.app/",// deployed client
+  "https://vkjwellersclient.vercel.app", // deployed client (no trailing slash)
   "https://vkjwellersadmin.vercel.app"   // deployed admin
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      // allow requests with no origin (curl, Postman)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error(`CORS blocked for origin: ${origin}`));
+        console.error(`CORS blocked for origin: ${origin}`);
+        callback(new Error(`Not allowed by CORS`));
       }
     },
-    credentials: true, // ✅ critical for cookies
-    methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'],
-    allowedHeaders: ['Content-Type','Authorization']
+    credentials: true, // required for cookies
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 
