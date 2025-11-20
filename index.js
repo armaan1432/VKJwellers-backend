@@ -39,7 +39,7 @@ const allowedOrigins = [
   "http://localhost:5173", // local client
   "http://localhost:5174", // local admin
   "https://vkjwellersclient-git-main-armaan-shuklas-projects.vercel.app",
-  "https://vkjwellersclient.vercel.app", // deployed client (no trailing slash)
+  "https://vkjwellersclient.vercel.app", // deployed client
   "https://vkjwellersadmin.vercel.app"   // deployed admin
 ];
 
@@ -51,10 +51,10 @@ app.use(
         callback(null, true);
       } else {
         console.error(`CORS blocked for origin: ${origin}`);
-        callback(new Error(`Not allowed by CORS`));
+        callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // required for cookies
+    credentials: true, // crucial for cookies to work cross-site
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
   })
@@ -91,7 +91,7 @@ app.get("/", (req, res) => {
 // ========================
 connectDb()
   .then(() => {
-    console.log(`✅ MongoDB Connected Successfully`);
+    console.log("✅ MongoDB Connected Successfully");
     app.listen(port, () => {
       console.log(`🚀 Server running on port ${port}`);
     });
