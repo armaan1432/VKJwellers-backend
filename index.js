@@ -34,27 +34,26 @@ const app = express();
 // ✅ CORS CONFIGURATION
 // ========================
 
-// Allowed origins: local + deployed frontend URLs
+// Allowed origins: Local + Client + Admin + Main Domain
 const allowedOrigins = [
   "http://localhost:5173", // local client
   "http://localhost:5174", // local admin
-  "https://vkjwellersclient-git-main-armaan-shuklas-projects.vercel.app",
-  "https://vkjwellersclient.vercel.app", // deployed client
-  "https://vkjwellersadmin.vercel.app"   // deployed admin
+  "https://vkjwellersclient.vercel.app",
+  "https://vkjwellersadmin.vercel.app",
+  "https://www.shrivkjewellers.com" // ⭐ your main domain
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (curl, Postman)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.error(`CORS blocked for origin: ${origin}`);
+        console.error(`❌ CORS Blocked for origin: ${origin}`);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // crucial for cookies to work cross-site
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
   })
@@ -81,7 +80,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 
-// Root test route
+// Root health route
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
