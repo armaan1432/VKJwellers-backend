@@ -39,7 +39,7 @@ const allowedOrigins = [
   "http://localhost:5173", // local client
   "http://localhost:5174", // local admin
   "https://vkjwellersclient.vercel.app",
-  "https://vkjwellersadmin.vercel.app",
+  "https://vkjwellers-admin.vercel.app",
   "https://www.shrivkjewellers.com" // ⭐ your main domain
 ];
 
